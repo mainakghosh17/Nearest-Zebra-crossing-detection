@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Signal Navigator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Road Signal Navigator</h1>
+        </header>
+
+        <div id="signup-container">
+            <p class="subheading">Sign Up to Find Nearby Zebra Crossings or Footover Bridges</p>
+            <form id="signup-form">
+                <label for="mobileNumber">Mobile Number:</label>
+                <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="Enter your mobile number" required>
+                <button type="button" onclick="getLocation()">Sign Up</button>
+            </form>
+        </div>
+
+        <div id="location-info" class="hidden">
+            <p id="location-text"></p>
+        </div>
+    </div>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Simulate a successful request for demonstration purposes
+            const zebraCrossingNearby = checkZebraCrossingNearby();
+
+            displayLocationInfo(latitude, longitude, zebraCrossingNearby);
+        }
+
+        function showError(error) {
+            alert(`Error getting location: ${error.message}`);
+        }
+
+        function checkZebraCrossingNearby() {
+            // Simulate randomly determining if a zebra crossing is nearby
+            return Math.random() < 0.5; // Adjust the probability as needed
+        }
+
+        function displayLocationInfo(latitude, longitude, zebraCrossingNearby) {
+            const infoContainer = document.getElementById("location-info");
+            const locationTextElement = document.getElementById("location-text");
+
+            locationTextElement.innerHTML = `<strong>Your Current Location:</strong><br>Latitude: ${latitude}<br>Longitude: ${longitude}<br>`;
+
+            if (zebraCrossingNearby) {
+                locationTextElement.innerHTML += "<strong>Zebra crossing or footover bridge found nearby!</strong><br>";
+                locationTextElement.innerHTML += `<a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}" target="_blank">Navigate to Zebra Crossing</a>`;
+            } else {
+                locationTextElement.innerHTML += "<strong>No zebra crossing or footover bridge nearby.</strong><br>";
+                locationTextElement.innerHTML += `<a href="https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}" target="_blank">Navigate to Zebra Crossing</a>`;
+            }
+
+            infoContainer.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
